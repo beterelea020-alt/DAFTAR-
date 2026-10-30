@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#123F3A">
+  <meta name="description" content="دفتر التحضير - نظام بسيط لتسجيل حضور وغياب الموظفين وإعداد التقارير الشهرية.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <title>دفتر التحضير | متابعة الموظفين</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="vendor/exceljs.min.js" defer></script>
+  <style>
+    :root{--navy:#123F3A;--navy-2:#1C5148;--blue:#2F6B5E;--blue-soft:#E3ECE6;--sky:#D5E2D9;--teal:#16877f;--green:#16865f;--green-bg:#e7f3ed;--red:#c94f59;--red-bg:#faecee;--amber:#bd7a2a;--amber-bg:#f9f0e4;--ink:#1d344a;--muted:#75847C;--line:#DDD9CB;--bg:#F2EFE6;--white:#f8fafc;--surface:#f7f9fc;--surface-soft:#F4F1E8;--shadow:0 10px 28px rgba(18,63,58,.09);--radius:19px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif;-webkit-tap-highlight-color:transparent}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.48;cursor:not-allowed}.hidden{display:none!important}.ltr{direction:ltr;text-align:left}.muted{color:var(--muted)}.small{font-size:12px}.tiny{font-size:10px}.app-shell{min-height:100dvh;display:flex;max-width:1440px;margin:auto}.sidebar{width:250px;background:var(--white);border-left:1px solid var(--line);padding:24px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100dvh;flex-shrink:0}.brand{display:flex;align-items:center;gap:12px;padding:4px 8px 26px}.brand-mark{height:46px;width:46px;border-radius:15px;background:linear-gradient(145deg,#123F3A,#2F6B5E);color:#fff;display:grid;place-items:center;font-weight:900;font-size:18px;box-shadow:0 8px 18px #123F3A2a}.brand-title{font-size:17px;font-weight:900}.brand-sub{font-size:11px;color:var(--muted);margin-top:1px}.nav-label{font-size:10px;color:#6B7B73;font-weight:800;padding:10px 12px 7px}.side-nav{display:grid;gap:6px}.nav-btn{border:0;background:transparent;color:#5F7068;padding:12px 13px;border-radius:13px;display:flex;align-items:center;gap:12px;text-align:right;font-size:13px;font-weight:700;width:100%;transition:.18s}.nav-btn .nav-ico{width:22px;text-align:center;font-size:17px}.nav-btn:hover{background:#F2F0E7;color:var(--navy)}.nav-btn.active{background:#E3ECE6;color:var(--navy);box-shadow:inset -3px 0 0 var(--blue)}.side-spacer{flex:1}.side-account{border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;gap:10px;align-items:center}.avatar{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:#E3ECE6;color:var(--navy);font-weight:900;flex-shrink:0}.side-account strong{font-size:12px;display:block}.side-account span{font-size:10px;color:var(--muted)}.main{min-width:0;flex:1;padding:0 28px 40px}.topbar{height:86px;display:flex;align-items:center;justify-content:space-between;gap:14px}.topbar-left{display:flex;align-items:center;gap:12px}.top-greeting{font-size:19px;font-weight:900}.top-date{color:var(--muted);font-size:12px}.top-actions{display:flex;align-items:center;gap:9px}.icon-btn{height:42px;min-width:42px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--navy);display:grid;place-items:center;font-size:17px}.icon-btn:hover{background:#f6fafe}.supervisor-pill{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);padding:6px 12px 6px 7px;border-radius:15px}.supervisor-pill .avatar{width:32px;height:32px;border-radius:11px}.supervisor-pill strong{font-size:12px}.supervisor-pill small{display:block;color:var(--muted);font-size:10px}.view{display:none;animation:fade .22s ease}.view.active{display:block}@keyframes fade{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:10px 0 22px}.page-head h1{margin:0;font-size:22px;font-weight:900}.page-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.btn{border:0;border-radius:13px;padding:11px 16px;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s}.btn:active{transform:scale(.98)}.btn-primary{background:var(--navy);color:#fff;box-shadow:0 6px 15px #123F3A22}.btn-primary:hover{background:#0E332F}.btn-soft{background:var(--blue-soft);color:var(--navy)}.btn-light{background:var(--surface);border:1px solid var(--line);color:var(--navy)}.btn-green{background:var(--green);color:#fff}.btn-red{background:var(--red-bg);color:#b53c45}.btn-amber{background:var(--amber-bg);color:#9b641c}.btn-block{width:100%}.btn-sm{padding:8px 11px;border-radius:10px;font-size:11px}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.card-pad{padding:19px}.muted-card{background:#F6F4EC;border:1px solid var(--line)}.hero{background:linear-gradient(115deg,#123F3A 0%,#1C5148 60%,#2F6B5E 100%);border-radius:24px;padding:24px;color:#fff;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 14px 30px #123F3A26}.hero:after{content:'';position:absolute;width:210px;height:210px;border:1px solid #ffffff20;border-radius:50%;left:-55px;top:-105px;box-shadow:0 0 0 24px #ffffff09,0 0 0 48px #ffffff07}.hero-copy{position:relative;z-index:1}.hero-kicker{font-size:11px;color:#d8e7f3}.hero h2{font-size:23px;line-height:1.45;margin:7px 0 5px;font-weight:900}.hero p{font-size:12px;color:#d5e5f1;margin:0}.hero .btn{background:var(--surface);color:var(--navy);margin-top:17px}.hero-art{font-size:62px;opacity:.92;position:relative;z-index:1;padding:0 10px}.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:18px 0}.stat-card{padding:16px;display:flex;align-items:center;gap:12px;min-height:104px}.stat-icon{height:42px;width:42px;flex-shrink:0;border-radius:14px;display:grid;place-items:center;font-size:18px;background:#E3ECE6;color:var(--navy)}.stat-icon.green{background:var(--green-bg);color:var(--green)}.stat-icon.red{background:var(--red-bg);color:var(--red)}.stat-icon.amber{background:var(--amber-bg);color:var(--amber)}.stat-label{font-size:11px;color:var(--muted);font-weight:700}.stat-value{font-size:25px;line-height:1.35;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}.stat-foot{font-size:10px;color:#6B7B73}.grid-two{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.section-title h3{margin:0;font-size:14px;font-weight:900}.section-title p{margin:3px 0 0;color:var(--muted);font-size:11px}.link-btn{border:0;background:transparent;color:var(--blue);font-size:11px;font-weight:800;padding:5px}.quick-list{display:grid;gap:9px}.quick-row{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--line);border-radius:14px}.quick-row .avatar{width:35px;height:35px}.quick-meta{flex:1;min-width:0}.quick-meta strong{font-size:12px;display:block}.quick-meta span{font-size:10px;color:var(--muted)}.status{font-size:10px;font-weight:800;border-radius:30px;padding:5px 9px;white-space:nowrap}.status.present{color:#0b8059;background:#e6f6ee}.status.absent{color:#c24650;background:#fff0f1}.status.late{color:#a96c17;background:#fff5e7}.status.leave{color:#6A7A72;background:#ECEEE9}.status.pending{color:#74869a;background:#f0f3f6}.progress-wrap{height:9px;border-radius:20px;background:#E6E9DF;overflow:hidden;display:flex}.progress-seg{height:100%}.progress-green{background:#1b9b72}.progress-red{background:#e16b72}.progress-amber{background:#e8ae53}.progress-blue{background:#7c9ebd}.muted-note{background:#F4F1E8;border:1px dashed #D3CFC0;padding:12px 14px;border-radius:14px;color:#6B7B73;font-size:11px;line-height:1.8}.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.searchbox{position:relative;flex:1;min-width:190px}.searchbox input{padding-right:39px}.searchbox span{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:15px;color:#6B7B73}.field{width:100%;border:1px solid #DDD9CB;background:#FBFAF5;padding:12px 13px;border-radius:12px;outline:none;color:var(--ink);font-size:12px;transition:.18s}.field:focus{border-color:#80aacb;box-shadow:0 0 0 3px #e3f0f9}.field-label{display:block;font-size:11px;font-weight:800;color:#5F7068;margin-bottom:7px}.field-group{margin-bottom:13px}.filter-row{display:flex;gap:7px;overflow:auto;padding-bottom:5px;scrollbar-width:none}.filter-chip{flex-shrink:0;border:1px solid var(--line);background:var(--surface);border-radius:30px;padding:8px 13px;font-size:10px;color:#6B7B73;font-weight:800}.filter-chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}.attendance-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;margin-bottom:12px}.attendance-summary strong{font-size:13px}.attendance-summary span{font-size:11px;color:var(--muted)}.employee-list{display:grid;gap:9px}.employee-row{display:flex;align-items:center;gap:11px;padding:13px 14px}.employee-row .avatar{width:42px;height:42px;border-radius:14px}.employee-info{flex:1;min-width:0}.employee-info strong{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.employee-info small{font-size:10px;color:var(--muted)}.employee-phone{direction:ltr;display:block;text-align:right}.row-actions{display:flex;align-items:center;gap:6px}.status-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.status-action{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 9px;font-size:10px;font-weight:800;color:#6B7B73}.status-action.selected.present{background:var(--green-bg);color:var(--green);border-color:#b9e6d1}.status-action.selected.absent{background:var(--red-bg);color:var(--red);border-color:#f1c3c5}.status-action.selected.late{background:var(--amber-bg);color:var(--amber);border-color:#f2d9b0}.status-action.selected.leave{background:#ECEEE9;color:#6A7A72;border-color:#D8DCD5}.wa-mini{height:35px;width:35px;border-radius:11px;border:0;background:#e7f7ef;color:#13855b;font-size:16px;flex-shrink:0}.employee-manage-actions{display:flex;gap:6px}.employee-manage-actions button{width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--navy)}.employee-manage-actions .delete{color:var(--red);background:#fff7f7}.report-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:15px 0}.report-stat{padding:14px;border:1px solid var(--line);border-radius:15px;background:#FBFAF5}.report-stat span{font-size:10px;color:var(--muted);font-weight:700}.report-stat strong{font-size:22px;display:block;font-weight:900;margin-top:3px}.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.export-btn{min-height:62px;border-radius:14px;padding:12px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;gap:11px;text-align:right;color:var(--ink)}.export-btn .export-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#e7f6ed;color:#16834f;font-size:17px;flex-shrink:0}.export-btn.pdf .export-icon{background:#fff0f0;color:#c84d55}.export-btn strong{font-size:11px;display:block}.export-btn small{font-size:9px;color:var(--muted)}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:15px}.data-table{width:100%;border-collapse:collapse;min-width:580px;font-size:11px}.data-table th{background:#EFEDE3;color:#5F7068;text-align:right;padding:11px;font-weight:900;white-space:nowrap}.data-table td{padding:11px;border-top:1px solid #edf1f5;white-space:nowrap}.data-table tr:last-child td{border-bottom:0}.data-table .number{text-align:center;font-weight:800;font-variant-numeric:tabular-nums}.empty-state{text-align:center;padding:34px 16px;color:var(--muted)}.empty-state .empty-icon{font-size:34px;margin-bottom:9px}.empty-state strong{display:block;color:var(--ink);font-size:13px}.empty-state p{font-size:11px;line-height:1.8;margin:5px 0 13px}.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.setting-card{padding:18px}.setting-card h3{font-size:13px;margin:0 0 4px}.setting-card p{font-size:10px;color:var(--muted);margin:0 0 15px;line-height:1.8}.setting-actions{display:flex;gap:8px;flex-wrap:wrap}.bottom-nav{display:none}.footer{text-align:center;color:#6B7B73;font-size:10px;padding:26px 0 10px}.modal-backdrop{position:fixed;inset:0;background:#102a42a6;backdrop-filter:blur(5px);z-index:80;display:flex;align-items:flex-end;justify-content:center;padding:14px}.modal{background:var(--surface);width:min(100%,520px);max-height:92dvh;overflow:auto;border-radius:24px;padding:20px;box-shadow:0 20px 60px #102a4240;animation:slide .2s ease}.modal.large{width:min(100%,760px)}@keyframes slide{from{transform:translateY(20px);opacity:.5}to{transform:none;opacity:1}}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.modal-head h3{font-size:15px;margin:0}.close-btn{height:34px;width:34px;border:0;background:#EEEBE0;border-radius:11px;color:#5F7068;font-size:18px}.modal-actions{display:flex;gap:8px;margin-top:17px}.modal-actions .btn{flex:1}.toast{position:fixed;z-index:120;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;transform:translate(-50%,25px);opacity:0;pointer-events:none;background:#123F3A;color:#fff;border-radius:13px;padding:11px 16px;font-size:11px;font-weight:700;box-shadow:0 10px 30px #123F3A40;transition:.22s;max-width:calc(100vw - 30px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.auth-wrap{min-height:100dvh;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 8% 8%,#e2eff8 0,transparent 36%),linear-gradient(145deg,#f7fbfe,#E3ECE6)}.auth-card{width:min(100%,440px);background:var(--surface);border:1px solid #e0eaf2;border-radius:28px;padding:28px;box-shadow:0 22px 55px #1b4b7020}.auth-brand{text-align:center;margin-bottom:24px}.auth-logo{margin:auto auto 13px;width:68px;height:68px;background:linear-gradient(145deg,#183f61,#397da9);color:#fff;border-radius:22px;display:grid;place-items:center;font-weight:900;font-size:24px;box-shadow:0 12px 25px #123F3A30}.auth-brand h1{font-size:22px;margin:0;font-weight:900}.auth-brand p{font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.8}.auth-note{font-size:10px;color:#8393a3;text-align:center;line-height:1.8;margin-top:18px}.auth-foot{text-align:center;color:#91a1b1;font-size:10px;margin-top:18px}.auth-switch{display:flex;background:#EEEBE0;padding:4px;border-radius:13px;margin-bottom:18px;gap:4px}.auth-switch button{flex:1;border:0;background:transparent;padding:9px;border-radius:10px;color:#6B7B73;font-size:11px;font-weight:800}.auth-switch button.active{background:var(--surface);color:var(--navy);box-shadow:0 3px 8px #123F3A10}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.form-grid .full{grid-column:1/-1}.modal-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.modal-stat{padding:12px 8px;text-align:center;background:#F6F4EC;border:1px solid var(--line);border-radius:13px}.modal-stat strong{display:block;font-size:20px;font-weight:900}.modal-stat span{font-size:9px;color:var(--muted)}.profile-head{display:flex;align-items:center;gap:12px}.profile-head .avatar{width:52px;height:52px;border-radius:17px;font-size:18px}.wa-options{display:grid;gap:8px}.wa-option{border:1px solid var(--line);background:#FBFAF5;border-radius:13px;padding:12px;text-align:right;display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:800}.wa-option span:last-child{color:var(--green);font-size:10px}.print-root{display:none}
+    @media(max-width:1050px){.sidebar{width:220px}.main{padding:0 20px 35px}.stats-grid{grid-template-columns:repeat(2,1fr)}.grid-two{grid-template-columns:1fr}}
+    @media(max-width:720px){.app-shell{display:block}.sidebar{display:none}.main{padding:0 14px calc(92px + env(safe-area-inset-bottom))}.topbar{height:70px}.top-greeting{font-size:16px}.top-date{font-size:10px}.top-actions .supervisor-pill{display:none}.page-head{align-items:center;margin:8px 0 17px}.page-head h1{font-size:19px}.page-head p{font-size:10px}.hero{padding:18px;border-radius:20px}.hero h2{font-size:19px}.hero p{font-size:10px;max-width:235px}.hero-art{font-size:47px}.stats-grid{gap:9px;margin:12px 0}.stat-card{padding:12px;min-height:88px;gap:9px}.stat-icon{width:36px;height:36px;border-radius:12px;font-size:16px}.stat-value{font-size:21px}.stat-label{font-size:10px}.stat-foot{font-size:9px}.card-pad{padding:15px}.grid-two{gap:12px}.toolbar{gap:8px}.searchbox{min-width:100%;flex-basis:100%}.attendance-summary{padding:11px 13px}.employee-row{padding:11px;gap:8px;align-items:flex-start;flex-wrap:wrap}.employee-row .avatar{width:38px;height:38px}.employee-info{padding-top:2px}.row-actions{margin-right:auto}.status-actions{width:100%;justify-content:stretch;padding-right:46px}.status-action{flex:1;padding:8px 5px}.wa-mini{height:33px;width:33px}.report-grid{grid-template-columns:repeat(2,1fr);gap:8px}.report-stat{padding:11px}.report-stat strong{font-size:20px}.export-grid{grid-template-columns:1fr}.export-btn{min-height:58px}.settings-grid{grid-template-columns:1fr}.bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;right:0;left:0;z-index:50;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(14px);border-top:1px solid var(--line);box-shadow:0 -7px 25px #123F3A0c}.bottom-nav button{border:0;background:transparent;color:#6B7B73;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:5px 1px;font-size:9px;font-weight:800}.bottom-nav button span:first-child{font-size:19px;line-height:1.1}.bottom-nav button.active{color:var(--navy)}.footer{padding:20px 0 8px}.modal-backdrop{padding:8px}.modal{border-radius:22px;padding:17px;max-height:94dvh}.modal-stat-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.auth-card{padding:23px 19px;border-radius:24px}.auth-brand h1{font-size:20px}.auth-note{font-size:9px}}
+    @media(max-width:380px){.hero-art{display:none}.hero h2{font-size:18px}.stats-grid{grid-template-columns:1fr 1fr}.status-action{font-size:9px}.topbar{gap:8px}.icon-btn{height:38px;min-width:38px}}
+    @media print{body{background:var(--surface)!important;color:#111!important}.auth-wrap,.app-shell,.modal-backdrop,.toast{display:none!important}.print-root{display:block!important;padding:0!important}.print-root h1{font-size:20px;margin:0 0 5px}.print-root p{font-size:10px;margin:3px 0 12px}.print-root h2{font-size:14px;margin:18px 0 7px}.print-root table{width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:9px;direction:rtl}.print-root th,.print-root td{border:1px solid #9aa8b5;padding:5px;text-align:right}.print-root th{background:#eaf1f6!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-root .print-break{break-before:page}.print-root .print-summary{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0}.print-root .print-summary span{border:1px solid #aebac4;padding:6px 10px;border-radius:5px;font-size:10px}@page{size:A4 landscape;margin:12mm}}
+
+    /* Visual refresh: calmer surfaces, stronger text contrast and touch-first controls. */
+    body{background:linear-gradient(180deg,#F2EFE6 0%,#F2EFE6 48%,#F2EFE6 100%);color:var(--ink)}
+    .sidebar{background:rgba(248,250,252,.94);border-color:var(--line)}
+    .main{padding-top:2px}
+    .card,.auth-card{background:var(--surface);border-color:var(--line);box-shadow:var(--shadow)}
+    .muted-card,.report-stat,.modal-stat{background:var(--surface-soft);border-color:var(--line)}
+    .field{background:#f1f5f9;border-color:#D8D4C5;color:var(--ink)}
+    .field:focus{background:#fbfcfe;border-color:#7299b8;box-shadow:0 0 0 3px #dce8f2}
+    .filter-chip,.btn-light,.icon-btn,.supervisor-pill{background:#f8fafc;border-color:var(--line)}
+    .nav-btn:hover{background:#EDF1EA}
+    .nav-btn.active{background:#E3ECE6}
+    .hero{background:linear-gradient(118deg,#123F3A 0%,#1C5148 58%,#2F6B5E 100%);box-shadow:0 14px 30px rgba(18,63,58,.18)}
+    .stat-icon{background:#E3ECE6}
+    .progress-wrap{background:#E6E9DF}
+    .muted-note{background:#EDF1EA;border-color:#D3CFC0;color:#5F7068}
+    .bottom-nav{background:rgba(247,249,252,.96);border-color:#d4dee8;box-shadow:0 -8px 26px rgba(18,63,58,.10)}
+    .modal{background:var(--surface);border:1px solid var(--line)}
+    .auth-wrap{background:radial-gradient(circle at 8% 8%,#dce8f2 0,transparent 38%),linear-gradient(145deg,#F2EFE6,#e3ebf3)}
+    .auth-card{background:rgba(248,250,252,.96)}
+    .auth-switch{background:#EEEBE0}
+    .auth-switch button.active{background:#f9fbfd}
+    .footer{color:#6B7B73}
+    .developer-link{display:inline-block;direction:ltr;unicode-bidi:isolate;color:var(--navy);font-family:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif;font-weight:800;text-decoration:none;border-bottom:1px solid rgba(18,63,58,.35);transition:color .18s,border-color .18s}
+    .developer-link:hover{color:var(--blue);border-color:var(--blue)}
+    .developer-link[aria-disabled="true"]{cursor:default}
+    button,.btn,.filter-chip,.nav-btn,.bottom-nav button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+    @media(max-width:720px){
+      body{min-height:100dvh}
+      .app-shell{width:100%;max-width:600px;margin:0 auto;min-height:100dvh}
+      .main{padding:0 13px calc(104px + env(safe-area-inset-bottom));}
+      .topbar{position:sticky;top:0;z-index:45;height:64px;margin:0 -13px 12px;padding:0 13px;background:rgba(233,239,245,.94);border-bottom:1px solid rgba(205,218,230,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+      .top-greeting{font-size:16px;letter-spacing:-.2px}
+      .top-date{font-size:10px;color:#6B7B73}
+      .top-actions .supervisor-pill{display:none}
+      .icon-btn{height:42px;min-width:42px;border-radius:14px;background:#f7f9fc}
+      .page-head{align-items:center;margin:7px 0 15px;gap:8px}
+      .page-head h1{font-size:20px;line-height:1.35}
+      .page-head p{font-size:11px;line-height:1.7}
+      .page-head>.btn{flex-shrink:0;padding:10px 12px;font-size:11px}
+      .hero{padding:19px 17px;border-radius:21px;min-height:164px;gap:8px}
+      .hero-kicker{font-size:10px}
+      .hero h2{font-size:19px;line-height:1.5}
+      .hero p{font-size:11px;line-height:1.8;max-width:245px}
+      .hero .btn{min-height:42px;margin-top:13px}
+      .hero-art{font-size:46px;padding:0 4px}
+      .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0}
+      .stat-card{min-height:86px;padding:12px 10px;gap:9px;border-radius:16px}
+      .stat-icon{width:35px;height:35px;border-radius:12px;font-size:16px}
+      .stat-label{font-size:10px;line-height:1.5}
+      .stat-value{font-size:22px}
+      .stat-foot{font-size:9px}
+      .grid-two{grid-template-columns:minmax(0,1fr);gap:11px}
+      .card{border-radius:18px}
+      .card-pad{padding:15px}
+      .section-title{margin-bottom:12px}
+      .section-title h3{font-size:14px}
+      .section-title p{font-size:10px;line-height:1.7}
+      .toolbar{gap:8px}
+      .searchbox{min-width:100%;flex-basis:100%}
+      .field{min-height:45px;border-radius:13px;font-size:16px}
+      .field-label{font-size:11px}
+      .filter-row{gap:7px;padding:2px 0 7px}
+      .filter-chip{min-height:36px;padding:8px 13px;font-size:10px}
+      .attendance-summary{padding:12px 13px;border-radius:16px;align-items:center}
+      .attendance-summary strong{font-size:12px}
+      .attendance-summary span{font-size:10px}
+      .employee-row{padding:12px;border-radius:16px;gap:8px;align-items:center;flex-wrap:wrap}
+      .employee-row .avatar{width:39px;height:39px;border-radius:13px}
+      .employee-info{padding-top:0}
+      .employee-info strong{font-size:12px}
+      .employee-info small{font-size:10px;line-height:1.65}
+      .row-actions{margin-right:auto}
+      .status-actions{width:100%;justify-content:stretch;padding-right:0;gap:6px}
+      .status-action{flex:1;min-height:38px;padding:8px 4px;border-radius:10px;font-size:10px}
+      .wa-mini{height:36px;width:36px;border-radius:12px}
+      .report-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+      .report-stat{padding:12px;border-radius:14px}
+      .report-stat strong{font-size:21px}
+      .report-stat span{font-size:10px}
+      .report-controls{gap:8px}
+      .export-grid{grid-template-columns:minmax(0,1fr);gap:9px}
+      .export-btn{min-height:62px;border-radius:15px}
+      .settings-grid{grid-template-columns:minmax(0,1fr);gap:11px}
+      .setting-card{padding:16px;border-radius:18px}
+      .setting-card h3{font-size:14px}
+      .setting-card p{font-size:11px;line-height:1.8}
+      .setting-actions{gap:8px}
+      .setting-actions .btn{min-height:42px}
+      .table-wrap{border-radius:13px}
+      .data-table{min-width:680px}
+      .bottom-nav{width:min(100%,600px);left:50%;right:auto;transform:translateX(-50%);padding:8px 12px calc(8px + env(safe-area-inset-bottom));border-radius:17px 17px 0 0}
+      .bottom-nav button{min-height:46px;font-size:10px;gap:4px}
+      .bottom-nav button span:first-child{font-size:20px}
+      .footer{padding:18px 0 9px;font-size:10px;line-height:1.9}
+      .modal-backdrop{padding:8px}
+      .modal{width:100%;border-radius:21px 21px 17px 17px;padding:17px;max-height:calc(94dvh - env(safe-area-inset-bottom));}
+      .modal-head h3{font-size:15px}
+      .modal-actions .btn{min-height:43px}
+      .auth-wrap{padding:18px 13px}
+      .auth-card{width:100%;max-width:430px;padding:24px 18px;border-radius:23px}
+      .auth-brand{margin-bottom:20px}
+      .auth-logo{width:64px;height:64px;border-radius:20px}
+      .auth-brand h1{font-size:21px}
+      .auth-brand p{font-size:11px}
+      .auth-card .btn{min-height:45px}
+      .auth-card .field{font-size:16px}
+    }
+    @media(max-width:380px){
+      .main{padding-right:11px;padding-left:11px}
+      .hero{padding:17px 14px}
+      .hero-art{display:none}
+      .stats-grid{gap:7px}
+      .stat-card{padding:10px 8px}
+      .status-action{font-size:9px}
+      .topbar{margin-right:-11px;margin-left:-11px;padding-right:11px;padding-left:11px}
+      .page-head h1{font-size:18px}
+    }
+
+    /* ---- Identity v4: indigo ink + brass, photo slots, bulk actions ---- */
+    :root{--navy:#123F3A;--navy-2:#1C5148;--blue:#2F6B5E;--blue-soft:#E3ECE6;--green:#1E7B4F;--green-bg:#E5F2EA;--red:#B8403A;--red-bg:#F9E9E7;--amber:#A8741B;--amber-bg:#F8EFDC;--ink:#263631;--muted:#75847C;--line:#DDD9CB;--bg:#F2EFE6;--surface:#fff;--surface-soft:#F4F1E8;--brass:#D6AF65}
+    body{background:var(--bg)}.field,.filter-chip,.btn-light,.icon-btn,.supervisor-pill{background:var(--surface)}
+    .nav-btn.active{box-shadow:inset -3px 0 0 var(--brass)}.hero-kicker{color:#E6D3A3}
+    :focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+    /* ضع الصور في assets/photos/ — لو الصورة مش موجودة يظهر التدرج اللوني تلقائيًا */
+    .hero{background:linear-gradient(118deg,rgba(18,63,58,.95) 0%,rgba(18,63,58,.78) 100%),url(assets/photos/hero.jpg) center/cover,#123F3A}
+    .auth-wrap{background:linear-gradient(rgba(18,38,35,.74),rgba(18,38,35,.74)),url(assets/photos/login.jpg) center/cover,#123F3A}
+    .bulk-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;margin-bottom:12px;flex-wrap:wrap}.bulk-bar strong{font-size:13px;display:block}.bulk-bar span.sub{font-size:11px;color:var(--muted)}.bulk-bar .progress-wrap{flex-basis:100%}
+    .day-nav{display:flex;gap:7px;margin-bottom:11px}.day-nav .btn{flex:1}
+    .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:5px}.dot.g{background:var(--green)}.dot.r{background:var(--red)}.dot.a{background:var(--amber)}
+    .toast.act{pointer-events:auto}.toast-undo{border:0;background:rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:5px 11px;margin-right:10px;font-weight:800}
+    :root{--bg:#F2EFE6;--surface:#FBFAF5;--white:#FBFAF5;--surface-soft:#F4F1E8}
+    .brand-mark,.auth-logo{background:none!important;box-shadow:none!important;padding:0;overflow:hidden}.auth-logo{width:72px;height:72px}
+    .field{background:#F0EDE2}.field:focus{background:var(--surface)}
+    .bottom-nav{background:rgba(251,250,245,.96)}.sidebar{background:var(--surface)}
+    @media(max-width:720px){.topbar{background:rgba(242,239,230,.94)}}
+    /* ---- Identity v5: forest green, sage, gold, warm cream (from the brand board) ---- */
+    :root{--navy:#123F3A;--navy-2:#1C5148;--blue:#2F6B5E;--blue-soft:#E3ECE6;--sky:#D5E2D9;--green:#2F7D5B;--green-bg:#E2EFE6;--red:#C45A4F;--red-bg:#F8E6E2;--amber:#B58528;--amber-bg:#F7ECD3;--ink:#263631;--muted:#75847C;--line:#DDD9CB;--bg:#F2EFE6;--white:#FBFAF5;--surface:#FBFAF5;--surface-soft:#F4F1E8;--brass:#D6AF65;--shadow:0 6px 18px rgba(18,63,58,.07)}
+    body{background:var(--bg);color:var(--ink)}
+    .field{background:#F0EDE2}.field:focus{background:var(--surface);border-color:#2F6B5E;box-shadow:0 0 0 3px #DCE8DF}
+    .brand-title{color:var(--navy)}.page-head h1,.top-greeting{color:var(--navy)}
+    .hero{color:var(--navy);background:linear-gradient(rgba(221,232,223,.94),rgba(201,219,207,.92)),url(assets/photos/hero.jpg) center/cover,#DDE8DF;border:1px solid #CFDDD3;box-shadow:var(--shadow)}
+    .hero:after{content:'';position:absolute;left:6px;bottom:0;top:auto;width:130px;height:130px;border:0;border-radius:0;box-shadow:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%238EAD9A' opacity='.6'%3E%3Cpath d='M18 112C16 62 48 20 104 8 104 62 72 102 18 112Z'/%3E%3Cpath d='M4 96C26 70 46 58 62 48C46 78 30 90 4 96Z'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/contain}
+    .hero h2{color:var(--navy)}.hero p{color:#3F5A52}.hero-kicker{color:#8A6A25}.hero .btn{background:var(--navy);color:#fff}
+    .auth-wrap{background:radial-gradient(circle at 8% 92%,#D5E2D9 0,transparent 38%),linear-gradient(rgba(242,239,230,.94),rgba(242,239,230,.94)),url(assets/photos/login.jpg) center/cover,#F2EFE6}
+    .auth-card{box-shadow:0 14px 40px rgba(18,63,58,.10)}
+    .stat-icon{background:#E3ECE6;color:var(--navy)}.progress-green{background:#2F7D5B}
+    .toast{background:var(--navy)}
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo" viewBox="0 0 512 512"><path d="M256 172L104 128V334L256 394L408 334V128Z" fill="none" stroke="#123F3A" stroke-width="26" stroke-linejoin="round"/><path d="M256 172V394" stroke="#123F3A" stroke-width="12"/><path d="M168 250l68 68 116-134" fill="none" stroke="#D6AF65" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+  <div id="authRoot" class="auth-wrap hidden">
+    <section class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-logo"><svg viewBox="0 0 512 512" width="100%" height="100%" role="img" aria-label="دفتر التحضير"><use href="#logo"/></svg></div>
+        <h1>دفتر التحضير</h1>
+        <p>إدارة حضور وانصراف الموظفين ببساطة ووضوح</p>
+      </div>
+      <div id="activationPanel" class="hidden">
+        <div class="field-group"><label class="field-label" for="activationCode">رمز التفعيل الأولي</label><input class="field ltr" id="activationCode" autocomplete="off" placeholder="أدخل رمز التفعيل"></div>
+        <button class="btn btn-primary btn-block" id="activateBtn">تفعيل النسخة ←</button>
+        
+      </div>
+      <div id="createPanel" class="hidden">
+        <div class="section-title"><div><h3>إنشاء حساب المشرف</h3><p>بيانات الشخص المسؤول عن دفتر التحضير</p></div></div>
+        <form id="createForm">
+          <div class="field-group"><label class="field-label">اسم المشرف أو الشركة</label><input class="field" name="name" required placeholder="اسمك أو اسم الشركة"></div>
+          <div class="form-grid">
+            <div class="field-group"><label class="field-label">رقم الهاتف</label><input class="field ltr" name="phone" required inputmode="tel" placeholder="010xxxxxxxx"></div>
+            <div class="field-group"><label class="field-label">اسم المستخدم</label><input class="field ltr" name="username" required autocomplete="username" placeholder="koko"></div>
+            <div class="field-group full"><label class="field-label">البريد الإلكتروني</label><input class="field ltr" name="email" type="email" placeholder="name@example.com"></div>
+            <div class="field-group full"><label class="field-label">كلمة المرور</label><input class="field ltr" name="password" type="password" minlength="6" required autocomplete="new-password" placeholder="6 أحرف على الأقل"></div>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">إنشاء الحساب والبدء</button>
+        </form>
+        
+      </div>
+      <div id="loginPanel" class="hidden">
+        <div class="section-title"><div><h3>تسجيل الدخول</h3><p>أدخل بيانات حساب المشرف للمتابعة</p></div></div>
+        <form id="loginForm">
+          <div class="field-group"><label class="field-label">اسم المستخدم أو البريد الإلكتروني</label><input class="field ltr" name="identity" required autocomplete="username" placeholder="اسم المستخدم أو البريد"></div>
+          <div class="field-group"><label class="field-label">كلمة المرور</label><input class="field ltr" name="password" type="password" required autocomplete="current-password" placeholder="كلمة المرور"></div>
+          <button class="btn btn-primary btn-block" type="submit">دخول إلى النظام ←</button>
+        </form>
+        
+      </div>
+      <div class="auth-foot">جميع الحقوق محفوظة © 2026 · تطوير <a class="developer-link" href="#" data-developer-link>peterelea</a></div>
+    </section>
+  </div>
+
+  <div id="appRoot" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"><svg viewBox="0 0 512 512" width="100%" height="100%" role="img" aria-label="دفتر التحضير"><use href="#logo"/></svg></div><div><div class="brand-title">دفتر التحضير</div><div class="brand-sub">متابعة الموظفين</div></div></div>
+      <div class="nav-label">القائمة الرئيسية</div>
+      <nav class="side-nav">
+        <button class="nav-btn active" data-view="dashboard"><span class="nav-ico">⌂</span>الرئيسية</button>
+        <button class="nav-btn" data-view="attendance"><span class="nav-ico">☑</span>التحضير اليومي</button>
+        <button class="nav-btn" data-view="employees"><span class="nav-ico">♙</span>الموظفون</button>
+        <button class="nav-btn" data-view="reports"><span class="nav-ico">▥</span>التقارير الشهرية</button>
+        <button class="nav-btn" data-view="settings"><span class="nav-ico">⚙</span>الإعدادات والنسخ الاحتياطي</button>
+      </nav>
+      <div class="side-spacer"></div>
+      <div class="side-account"><div class="avatar" id="sideAvatar">م</div><div><strong id="sideName">المشرف</strong><span>المشرف المسؤول</span></div></div>
+      <button class="nav-btn" id="sideLogout" style="margin-top:10px;color:#c34f58"><span class="nav-ico">↪</span>تسجيل الخروج</button>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left"><div><div class="top-greeting" id="greeting">أهلاً بك</div><div class="top-date" id="todayLabel">اليوم</div></div></div>
+        <div class="top-actions"><div class="supervisor-pill"><div class="avatar" id="topAvatar">م</div><div><strong id="topName">المشرف</strong><small>حساب المشرف</small></div></div><button class="icon-btn" id="settingsShortcut" title="الإعدادات">⚙</button></div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="hero"><div class="hero-copy"><div class="hero-kicker">نظام متابعة فريق العمل</div><h2 id="heroTitle">كل يوم حضورك أوضح</h2><p>سجّل بيانات الموظفين، راجع دفتر التحضير، واستخرج تقريرك الشهري في دقائق.</p><button class="btn" data-go="attendance">ابدأ تحضير اليوم <span>←</span></button></div></div>
+        <div class="stats-grid">
+          <div class="card stat-card"><div class="stat-icon">♙</div><div><div class="stat-label">إجمالي الموظفين</div><div class="stat-value" id="statEmployees">0</div><div class="stat-foot">موظف مسجل</div></div></div>
+          <div class="card stat-card"><div class="stat-icon green">✓</div><div><div class="stat-label">حاضر اليوم</div><div class="stat-value" id="statPresent">0</div><div class="stat-foot">تم تسجيل حضورهم</div></div></div>
+          <div class="card stat-card"><div class="stat-icon red">×</div><div><div class="stat-label">غائب اليوم</div><div class="stat-value" id="statAbsent">0</div><div class="stat-foot">مسجل كغياب</div></div></div>
+          <div class="card stat-card"><div class="stat-icon amber">◷</div><div><div class="stat-label">لم يُسجل بعد</div><div class="stat-value" id="statPending">0</div><div class="stat-foot">بانتظار المراجعة</div></div></div>
+        </div>
+        <div class="grid-two">
+          <div class="card card-pad"><div class="section-title"><div><h3>حالة التحضير اليوم</h3><p id="progressLabel">لم يتم تسجيل أي حالة بعد</p></div><button class="link-btn" data-go="attendance">فتح التحضير ←</button></div><div class="progress-wrap"><div class="progress-seg progress-green" id="progressPresent" style="width:0%"></div><div class="progress-seg progress-red" id="progressAbsent" style="width:0%"></div><div class="progress-seg progress-amber" id="progressLate" style="width:0%"></div></div><div style="display:flex;justify-content:space-between;gap:8px;margin-top:12px;font-size:10px;color:var(--muted)"><span><i class="dot g"></i>حضور <b id="legendPresent">0</b></span><span><i class="dot r"></i>غياب <b id="legendAbsent">0</b></span><span><i class="dot a"></i>تأخير <b id="legendLate">0</b></span></div></div>
+          <div class="card card-pad"><div class="section-title"><div><h3>آخر حالات التحضير</h3><p>آخر الموظفين الذين تم تحديث حالتهم</p></div><button class="link-btn" data-go="attendance">عرض الكل</button></div><div class="quick-list" id="recentActivity"><div class="empty-state"><div class="empty-icon">▤</div><strong>لا توجد تسجيلات بعد</strong><p>ابدأ بإضافة الموظفين ثم سجل حضورهم.</p></div></div></div>
+        </div>
+        <div class="footer">جميع الحقوق محفوظة © 2026 · تطوير <a class="developer-link" href="#" data-developer-link>peterelea</a></div>
+      </section>
+
+      <section class="view" id="view-attendance">
+        <div class="page-head"><div><h1>التحضير اليومي</h1><p>سجل الحالة طبقًا لدفتر التحضير الورقي.</p></div><button class="btn btn-primary" id="goAddFromAttendance">＋ موظف جديد</button></div>
+        <div class="card card-pad" style="margin-bottom:13px">
+          <div class="toolbar"><div class="field-group" style="margin:0;min-width:170px;flex:1"><label class="field-label">تاريخ دفتر التحضير</label><input class="field" id="attendanceDate" type="date"></div><div class="field-group" style="margin:0;min-width:180px;flex:2"><label class="field-label">بحث عن موظف</label><div class="searchbox"><span>⌕</span><input class="field" id="attendanceSearch" placeholder="الاسم أو رقم الهاتف"></div></div></div>
+          <div class="day-nav"><button class="btn btn-light btn-sm" id="dayPrev">اليوم السابق</button><button class="btn btn-soft btn-sm" id="dayToday">اليوم</button><button class="btn btn-light btn-sm" id="dayNext">اليوم التالي</button></div><div class="filter-row" id="attendanceFilters"><button class="filter-chip active" data-filter="all">الكل</button><button class="filter-chip" data-filter="present">حاضر</button><button class="filter-chip" data-filter="absent">غائب</button><button class="filter-chip" data-filter="late">متأخر</button><button class="filter-chip" data-filter="leave">إجازة</button><button class="filter-chip" data-filter="pending">لم يسجل</button></div>
+        </div>
+        <div class="card attendance-summary"><div><strong id="attendanceCountTitle">قائمة الموظفين</strong><br><span id="attendanceCountSub">اختر حالة كل موظف</span></div><div style="display:flex;gap:10px;font-size:11px;font-weight:800"><span style="color:var(--green)">✓ <b id="dayPresent">0</b></span><span style="color:var(--red)">× <b id="dayAbsent">0</b></span><span style="color:var(--amber)">◷ <b id="dayLate">0</b></span></div></div>
+        <div class="card bulk-bar" id="lockBar"></div>
+        <div class="card bulk-bar"><div><strong id="bulkTitle"></strong><span class="sub" id="bulkSub">إذا كانت الورقة مكتملة، سجّل الجميع حاضرين ثم عدّل الاستثناءات.</span></div><button class="btn btn-green" id="markAllPresent">تسجيل الباقي حاضر</button><div class="progress-wrap"><div class="progress-seg progress-green" id="bulkBar" style="width:0%"></div></div></div>
+        <div id="attendanceList" class="employee-list"></div>
+        
+      </section>
+
+      <section class="view" id="view-employees">
+        <div class="page-head"><div><h1>إدارة الموظفين</h1><p>أضف بيانات العاملين ورتّبهم كما يظهرون في دفتر التحضير.</p></div><button class="btn btn-primary" id="addEmployeeBtn">＋ إضافة موظف</button></div>
+        <div class="card card-pad"><div class="toolbar"><div class="searchbox"><span>⌕</span><input class="field" id="employeeSearch" placeholder="ابحث باسم الموظف أو الرقم..."></div><span class="status pending" id="employeeTotal">0 موظف</span></div><div id="employeesList" class="employee-list"></div></div>
+        
+      </section>
+
+      <section class="view" id="view-reports">
+        <div class="page-head"><div><h1>التقارير الشهرية</h1><p>راجع حضور الشهر وصدّر التقرير.</p></div></div>
+        <div class="card card-pad">
+          <div class="section-title"><div><h3>اختيار فترة التقرير</h3><p>اختر الشهر والسنة.</p></div></div>
+          <div class="report-controls"><div class="field-group" style="margin:0"><label class="field-label">الشهر</label><select class="field" id="reportMonth"></select></div><div class="field-group" style="margin:0"><label class="field-label">السنة</label><select class="field" id="reportYear"></select></div></div>
+          <div class="report-grid"><div class="report-stat"><span>عدد الموظفين</span><strong id="reportEmployees">0</strong></div><div class="report-stat"><span>إجمالي الحضور</span><strong id="reportPresent" style="color:var(--green)">0</strong></div><div class="report-stat"><span>إجمالي الغياب</span><strong id="reportAbsent" style="color:var(--red)">0</strong></div><div class="report-stat"><span>إجمالي التأخير</span><strong id="reportLate" style="color:var(--amber)">0</strong></div></div>
+          <div class="muted-note" id="reportCheck" style="margin-bottom:12px"></div><div class="export-grid"><button class="export-btn" id="exportExcel"><span class="export-icon">▦</span><span><strong>تقرير Excel</strong><small>جاهز للإرسال للإدارة</small></span></button><button class="export-btn pdf" id="exportPdf"><span class="export-icon">▤</span><span><strong>تقرير PDF</strong><small>للطباعة أو الحفظ</small></span></button></div>
+          
+        </div>
+        <div class="card card-pad" style="margin-top:14px"><div class="section-title"><div><h3>ملخص الموظفين لهذا الشهر</h3><p>اضغط على اسم الموظف لعرض تفاصيل سجله.</p></div></div><div class="table-wrap"><table class="data-table"><thead><tr><th>م</th><th>اسم الموظف</th><th>الوظيفة</th><th>حضور</th><th>غياب</th><th>تأخير</th><th>إجازة</th><th>نسبة الحضور</th></tr></thead><tbody id="reportTableBody"></tbody></table></div></div>
+        
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="page-head"><div><h1>الإعدادات</h1><p>بيانات الحساب والنسخ الاحتياطي.</p></div></div>
+        <div class="settings-grid">
+          <div class="card setting-card"><h3>بيانات المشرف والمنشأة</h3><p>الاسم الذي يظهر داخل النظام وفي الرسائل والتقارير.</p><form id="settingsForm"><div class="field-group"><label class="field-label">اسم المشرف / الشركة</label><input class="field" name="name" required></div><div class="field-group"><label class="field-label">رقم الهاتف</label><input class="field ltr" name="phone" inputmode="tel"></div><div class="field-group"><label class="field-label">البريد الإلكتروني</label><input class="field ltr" name="email" type="email"></div><button class="btn btn-primary btn-block" type="submit">حفظ الإعدادات</button></form></div>
+          <div class="card setting-card"><h3>النسخ الاحتياطي للبيانات</h3><p>احفظ نسخة من الموظفين وسجلات الحضور بشكل دوري.</p><div class="setting-actions"><button class="btn btn-soft" id="backupBtn">↓ تصدير نسخة احتياطية</button><button class="btn btn-light" id="restoreBtn">↑ استيراد نسخة</button><input type="file" id="restoreFile" accept="application/json,.json" class="hidden"></div><div class="muted-note" style="margin-top:13px">بياناتك محفوظة على هذا الجهاز، فاحتفظ بنسخة احتياطية قبل تغيير الهاتف أو مسح بيانات المتصفح.</div></div>
+          <div class="card setting-card"><h3>تثبيت التطبيق على الهاتف</h3><p>أضف التطبيق إلى الشاشة الرئيسية ليعمل كأي تطبيق على هاتفك.</p><div class="setting-actions"><button class="btn btn-soft" id="installBtn" disabled>＋ تثبيت التطبيق</button><button class="btn btn-light" id="installHelp">طريقة التثبيت</button></div></div>
+          <div class="card setting-card"><h3>الحساب وتسجيل الخروج</h3><p>تغيير كلمة المرور وتسجيل الخروج.</p><div class="setting-actions"><button class="btn btn-light" id="changePasswordBtn">تغيير كلمة المرور</button><button class="btn btn-red" id="logoutBtn">تسجيل الخروج</button></div></div>
+        </div>
+        <div class="footer">جميع الحقوق محفوظة © 2026 · تطوير <a class="developer-link" href="#" data-developer-link>peterelea</a></div>
+      </section>
+    </main>
+    <nav class="bottom-nav" id="bottomNav"><button class="active" data-view="dashboard"><span>⌂</span>الرئيسية</button><button data-view="attendance"><span>☑</span>التحضير</button><button data-view="employees"><span>♙</span>الموظفون</button><button data-view="reports"><span>▥</span>التقارير</button></nav>
+  </div>
+
+  <div id="modalRoot"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="printRoot" class="print-root"></div>
+
+  <script>
+  'use strict';
+  // This app is intentionally frontend-only. Change this one-time code before distributing a customer build.
+  const ACTIVATION_CODE = 'PETER-2026';
+  // Add the developer's destination URL here whenever it is ready.
+  const DEVELOPER_LINK = 'https://peter-elia-cv.vercel.app/';
+  const STORAGE_KEY = 'daftar_attendance_app_v3';
+  const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const STATUS = {present:{label:'حاضر',class:'present'},absent:{label:'غائب',class:'absent'},late:{label:'متأخر',class:'late'},leave:{label:'إجازة',class:'leave'}};
+  const DEFAULT_STATE = {activated:false,supervisor:null,employees:[],logs:{},drafts:{},confirmed:{},session:false};
+  let state = loadState();
+  let activeView = 'dashboard';
+  let attendanceFilter = 'all';
+  let selectedEmployeeId = null;
+  let waEmployeeId = null;
+  let installPrompt = null;
+  let toastTimer = null;
+
+  const $ = (id)=>document.getElementById(id);
+  const esc = (value)=>String(value ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const todayISO = ()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+  const monthKey = (date)=>String(date || todayISO()).slice(0,7);
+  const dateParts = (iso)=>{const [y,m,d]=String(iso).split('-').map(Number);return new Date(y,m-1,d)};
+  const formatDate = (iso, opts={weekday:'long',year:'numeric',month:'long',day:'numeric'})=>dateParts(iso).toLocaleDateString('ar-EG',opts);
+  const formatMonth = (key)=>{const [y,m]=key.split('-').map(Number);return `${MONTHS_AR[m-1]} ${y}`};
+  const uid = ()=>window.crypto && typeof window.crypto.randomUUID==='function' ? window.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  function loadState(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return structuredClone(DEFAULT_STATE);const parsed=JSON.parse(raw);return {...structuredClone(DEFAULT_STATE),...parsed,employees:Array.isArray(parsed.employees)?parsed.employees:[],logs:parsed.logs&&typeof parsed.logs==='object'?parsed.logs:{},drafts:parsed.drafts&&typeof parsed.drafts==='object'?parsed.drafts:{},confirmed:parsed.confirmed&&typeof parsed.confirmed==='object'?parsed.confirmed:{}}}catch(e){return structuredClone(DEFAULT_STATE)}}
+  function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));return true}catch(e){toast('مساحة التخزين ممتلئة. صدّر نسخة احتياطية واحذف بيانات غير ضرورية.');return false}}
+  function toast(message){const el=$('toast');el.classList.remove('act');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
+  function syncDeveloperLinks(){document.querySelectorAll('[data-developer-link]').forEach(link=>{if(DEVELOPER_LINK.trim()){link.href=DEVELOPER_LINK.trim();link.target='_blank';link.rel='noopener noreferrer';link.removeAttribute('aria-disabled')}else{link.href='#';link.removeAttribute('target');link.setAttribute('aria-disabled','true')}})}
+  document.addEventListener('click',event=>{const link=event.target.closest('[data-developer-link]');if(link&&!DEVELOPER_LINK.trim())event.preventDefault()});
+  function getLog(date){return state.drafts[date]||state.logs[date]||{}}
+  function statusOf(date,id){return getLog(date)[id] || ''}
+  function statsForEmployee(id,key){const result={present:0,absent:0,late:0,leave:0,recorded:0};for(const [date,items] of Object.entries(state.logs)){if(date.startsWith(key) && items && items[id]){const s=items[id];if(Object.prototype.hasOwnProperty.call(result,s)){result[s]++;result.recorded++}}}return result}
+  function statsForMonth(key){const total={present:0,absent:0,late:0,leave:0,recorded:0};for(const emp of state.employees){const s=statsForEmployee(emp.id,key);for(const k of Object.keys(total))total[k]+=s[k]||0}return total}
+  function statsForDate(date){const log=getLog(date);const values={present:0,absent:0,late:0,leave:0,pending:0};for(const emp of state.employees){const s=log[emp.id];if(s&&values[s]!==undefined)values[s]++;else values.pending++}return values}
+  function showAuth(){ $('appRoot').classList.add('hidden');$('authRoot').classList.remove('hidden');$('activationPanel').classList.toggle('hidden',state.activated);$('createPanel').classList.toggle('hidden',!state.activated||!!state.supervisor);$('loginPanel').classList.toggle('hidden',!state.activated||!state.supervisor); }
+  function showApp(){ $('authRoot').classList.add('hidden');$('appRoot').classList.remove('hidden');updateSupervisorUI();setView(activeView);renderDashboard(); }
+  function updateSupervisorUI(){const name=state.supervisor?.name||'المشرف';$('sideName').textContent=name;$('topName').textContent=name;$('sideAvatar').textContent=name.trim().charAt(0)||'م';$('topAvatar').textContent=name.trim().charAt(0)||'م';$('greeting').textContent=`أهلاً ${name}`;const today=todayISO();$('todayLabel').textContent=formatDate(today);$('heroTitle').textContent=`صباح النشاط يا ${name}`;}
+  function init(){
+    syncDeveloperLinks();
+    $('activateBtn').addEventListener('click',()=>{const code=$('activationCode').value.trim();if(code!==ACTIVATION_CODE){toast('رمز التفعيل غير صحيح');return}state.activated=true;persist();showAuth();toast('تم تفعيل النسخة. أنشئ حساب المشرف الآن.')});
+    $('createForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const name=String(fd.get('name')).trim();const phone=String(fd.get('phone')).trim();const username=String(fd.get('username')).trim();const email=String(fd.get('email')).trim();const password=String(fd.get('password'));if(password.length<6){toast('كلمة المرور يجب ألا تقل عن 6 أحرف');return}state.supervisor={name,phone,username,email,password};state.session=true;persist();showApp();toast('تم إنشاء الحساب بنجاح')});
+    $('loginForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const identity=String(fd.get('identity')).trim().toLowerCase();const password=String(fd.get('password'));const account=state.supervisor;if(account&&(identity===String(account.username||'').toLowerCase()||identity===String(account.email||'').toLowerCase())&&password===account.password){state.session=true;persist();showApp();toast('تم تسجيل الدخول')}else toast('بيانات الدخول غير صحيحة')});
+    document.querySelectorAll('[data-view]').forEach(btn=>btn.addEventListener('click',()=>setView(btn.dataset.view)));
+    document.querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=>setView(btn.dataset.go)));
+    $('attendanceDate').value=todayISO();$('attendanceDate').addEventListener('change',renderAttendance);$('attendanceSearch').addEventListener('input',renderAttendance);$('employeeSearch').addEventListener('input',renderEmployees);
+    $('attendanceFilters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;attendanceFilter=b.dataset.filter;document.querySelectorAll('.filter-chip').forEach(x=>x.classList.toggle('active',x===b));renderAttendance()});
+    $('markAllPresent').addEventListener('click',markAllPresent);$('dayPrev').addEventListener('click',()=>shiftDay(-1));$('dayNext').addEventListener('click',()=>shiftDay(1));$('dayToday').addEventListener('click',()=>{$('attendanceDate').value=todayISO();renderAttendance()});
+    $('addEmployeeBtn').addEventListener('click',()=>openEmployeeForm());$('goAddFromAttendance').addEventListener('click',()=>openEmployeeForm());
+    $('reportMonth').addEventListener('change',renderReports);$('reportYear').addEventListener('change',renderReports);
+    $('exportExcel').addEventListener('click',exportExcel);$('exportPdf').addEventListener('click',printPdf);
+    $('settingsShortcut').addEventListener('click',()=>setView('settings'));$('sideLogout').addEventListener('click',logout);$('logoutBtn').addEventListener('click',logout);
+    $('settingsForm').addEventListener('submit',saveSettings);$('backupBtn').addEventListener('click',exportBackup);$('restoreBtn').addEventListener('click',()=>$('restoreFile').click());$('restoreFile').addEventListener('change',restoreBackup);
+    $('installHelp').addEventListener('click',()=>openModal('طريقة تثبيت التطبيق',`<div class="muted-note">على Android: افتح الرابط في Chrome ثم من القائمة اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».<br><br>على iPhone: افتح الرابط في Safari ثم اضغط مشاركة، واختر «إضافة إلى الشاشة الرئيسية».</div>`));
+    $('installBtn').addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').disabled=true});
+    $('changePasswordBtn').addEventListener('click',changePasswordModal);
+    const now=new Date();$('reportMonth').innerHTML=MONTHS_AR.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');$('reportMonth').value=String(now.getMonth()+1).padStart(2,'0');const y=now.getFullYear();$('reportYear').innerHTML=Array.from({length:Math.max(1,y+4-2020+1)},(_,i)=>2020+i).map(n=>`<option value="${n}">${n}</option>`).join('');$('reportYear').value=String(y);
+    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').disabled=false});
+    if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+    sealPast();setInterval(()=>{sealPast();if(!$('appRoot').classList.contains('hidden')){if(activeView==='attendance')renderAttendance();renderDashboard()}},60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){sealPast();if(activeView==='attendance')renderAttendance()}});
+    if(state.session&&state.supervisor)showApp();else showAuth();
+  }
+  function setView(view){activeView=view;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===`view-${view}`));document.querySelectorAll('.nav-btn[data-view],.bottom-nav [data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));if(view==='dashboard')renderDashboard();if(view==='attendance')renderAttendance();if(view==='employees')renderEmployees();if(view==='reports')renderReports();if(view==='settings')renderSettings();window.scrollTo({top:0,behavior:'smooth'})}
+  function renderDashboard(){if(!$('statEmployees'))return;const date=todayISO(),s=statsForDate(date),total=state.employees.length,recorded=total-s.pending;$('statEmployees').textContent=total;$('statPresent').textContent=s.present;$('statAbsent').textContent=s.absent;$('statPending').textContent=s.pending;$('dayPresent').textContent=s.present;$('dayAbsent').textContent=s.absent;$('dayLate').textContent=s.late;const pct=n=>total?Math.round(n/total*100):0;$('progressPresent').style.width=pct(s.present)+'%';$('progressAbsent').style.width=pct(s.absent)+'%';$('progressLate').style.width=pct(s.late)+'%';$('legendPresent').textContent=s.present;$('legendAbsent').textContent=s.absent;$('legendLate').textContent=s.late;$('progressLabel').textContent=total?`${recorded} من ${total} موظف تم تسجيل حالتهم`:'أضف الموظفين للبدء';const recent=[];for(const [d,log] of Object.entries(state.logs)){for(const [id,status] of Object.entries(log||{})){const emp=state.employees.find(e=>e.id===id);if(emp&&STATUS[status])recent.push({d,id,status,emp})}}recent.sort((a,b)=>b.d.localeCompare(a.d));$('recentActivity').innerHTML=recent.length?recent.slice(0,4).map(x=>`<div class="quick-row"><div class="avatar">${esc(x.emp.name.charAt(0))}</div><div class="quick-meta"><strong>${esc(x.emp.name)}</strong><span>${esc(formatDate(x.d,{month:'short',day:'numeric'}))}</span></div><span class="status ${STATUS[x.status].class}">${STATUS[x.status].label}</span></div>`).join(''):`<div class="empty-state"><div class="empty-icon">▤</div><strong>لا توجد تسجيلات بعد</strong><p>ابدأ بإضافة الموظفين ثم سجل حضورهم.</p></div>`;}
+  function renderAttendance(){const date=$('attendanceDate').value||todayISO();const q=$('attendanceSearch').value.trim().toLowerCase();const day=statsForDate(date);$('attendanceCountTitle').textContent=`${state.employees.length} موظف`;$('attendanceCountSub').textContent=formatDate(date);const ed=isEditable(date);updateBulk(day,ed);renderLockBar(date,day,ed);$('dayPresent').textContent=day.present;$('dayAbsent').textContent=day.absent;$('dayLate').textContent=day.late;const employees=state.employees.filter(emp=>(emp.name+' '+emp.phone+' '+(emp.role||'')).toLowerCase().includes(q)).filter(emp=>attendanceFilter==='all'||(attendanceFilter==='pending'?!statusOf(date,emp.id):statusOf(date,emp.id)===attendanceFilter));if(!employees.length){$('attendanceList').innerHTML=`<div class="card empty-state"><div class="empty-icon">♙</div><strong>${state.employees.length?'لا توجد نتائج':'لم تضف موظفين حتى الآن'}</strong><p>${state.employees.length?'جرّب تغيير البحث أو فلتر الحالة.':'أضف أسماء الموظفين وأرقامهم أولاً، ثم ابدأ تسجيل الحضور.'}</p><button class="btn btn-primary" onclick="openEmployeeForm()">＋ إضافة موظف</button></div>`;return}const log=getLog(date);$('attendanceList').innerHTML=employees.map(emp=>{const st=log[emp.id]||'';return `<article class="card employee-row"><div class="avatar" onclick="openEmployeeDetails('${emp.id}')">${esc(emp.name.charAt(0))}</div><div class="employee-info" onclick="openEmployeeDetails('${emp.id}')"><strong>${esc(emp.name)}</strong><small>${esc(emp.role||'موظف')} · <span class="employee-phone">${esc(emp.phone||'')}</span></small></div><div class="row-actions"><button class="wa-mini" title="واتساب" onclick="openWhatsApp('${emp.id}')">◉</button></div><div class="status-actions">${Object.entries(STATUS).map(([key,v])=>`<button class="status-action ${st===key?'selected '+key:''}" ${ed?'':'disabled'} onclick="setStatus('${emp.id}','${key}')">${v.label}</button>`).join('')}</div></article>`}).join('')}
+  function updateBulk(day,ed){const total=state.employees.length,done=total-day.pending;$('bulkTitle').textContent=!total?'لا يوجد موظفون':day.pending?`${done} من ${total} تم تسجيلهم`:'تم تسجيل حالة الجميع';$('markAllPresent').textContent=day.pending?`تسجيل الباقي حاضر (${day.pending})`:'تم تسجيل الجميع';$('markAllPresent').disabled=!day.pending||!ed;$('markAllPresent').closest('.bulk-bar').classList.toggle('hidden',!ed);$('bulkBar').style.width=(total?Math.round(done/total*100):0)+'%'}
+  function shiftDay(n){const d=dateParts($('attendanceDate').value||todayISO());d.setDate(d.getDate()+n);$('attendanceDate').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;renderAttendance()}
+  function toastUndo(msg,fn){const el=$('toast');el.innerHTML=`${esc(msg)}<button class="toast-undo">تراجع</button>`;el.classList.add('show','act');el.querySelector('button').onclick=()=>{fn();el.classList.remove('show','act');toast('تم التراجع')};clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show','act'),6000)}
+  function markAllPresent(){const date=$('attendanceDate').value||todayISO();if(!isEditable(date))return;const dr0=ensureDraft(date);const ids=state.employees.filter(e=>!dr0[e.id]).map(e=>e.id);if(!ids.length)return;ids.forEach(id=>dr0[id]='present');persist();renderAttendance();renderDashboard();toastUndo(`تم تسجيل ${ids.length} موظف حاضر`,()=>{const dr=ensureDraft(date);ids.forEach(id=>delete dr[id]);persist();renderAttendance();renderDashboard()})}
+  function isEditable(date){return date===todayISO()&&(!state.confirmed[date]||!!state.drafts[date])}
+  function ensureDraft(date){if(!state.drafts[date])state.drafts[date]=structuredClone(state.logs[date]||{});return state.drafts[date]}
+  function sealPast(){const t=todayISO();let ch=false;for(const d of Object.keys(state.drafts)){if(d<t){if(Object.keys(state.drafts[d]).length)state.logs[d]=state.drafts[d];state.confirmed[d]=true;delete state.drafts[d];ch=true}}if(ch)persist()}
+  function startEdit(){ensureDraft(todayISO());persist();renderAttendance()}
+  function cancelEdit(){delete state.drafts[todayISO()];persist();renderAttendance();renderDashboard();toast('تم إلغاء التعديلات')}
+  function renderLockBar(date,day,ed){const t=todayISO();let h;if(date!==t)h=`<div><strong>يوم مغلق — للعرض فقط</strong><span class="sub">${date<t?'انتهى هذا اليوم وتم تسجيله، ولا يمكن تعديله.':'لا يمكن تسجيل الحضور ليوم لم يبدأ بعد.'}</span></div>`;else if(!ed)h=`<div><strong>تم اعتماد تحضير اليوم</strong><span class="sub">للتعديل اضغط «تعديل»، وسيُطلب منك إدخال كلمة المرور عند الاعتماد.</span></div><button class="btn btn-light" onclick="startEdit()">تعديل</button>`;else h=`<div><strong>تحضير اليوم غير معتمد</strong><span class="sub">${day.pending?day.pending+' موظف لم تُسجل حالتهم. ':''}لا يدخل في التقارير إلا بعد الاعتماد بكلمة المرور.</span></div><button class="btn btn-primary" onclick="confirmDay()">اعتماد التحضير</button>${state.confirmed[date]?'<button class="btn btn-light" onclick="cancelEdit()">إلغاء التعديلات</button>':''}`;$('lockBar').innerHTML=h}
+  function confirmDay(){const date=todayISO(),d=statsForDate(date);openModal('اعتماد تحضير اليوم',`<p style="font-size:12px;line-height:2;color:var(--muted)">${esc(formatDate(date))}<br>حاضر ${d.present} · غائب ${d.absent} · متأخر ${d.late} · إجازة ${d.leave}${d.pending?` · <b style="color:var(--red)">لم يُسجل ${d.pending}</b>`:''}<br>أدخل كلمة المرور لتأكيد الاعتماد.</p><form id="confirmForm"><div class="field-group"><label class="field-label">كلمة المرور</label><input class="field ltr" type="password" name="pw" required autocomplete="current-password"></div><div class="modal-actions"><button class="btn btn-primary">اعتماد وحفظ</button><button type="button" class="btn btn-light" onclick="closeModal()">رجوع</button></div></form>`);$('confirmForm').addEventListener('submit',e=>{e.preventDefault();if(new FormData(e.currentTarget).get('pw')!==state.supervisor.password){toast('كلمة المرور غير صحيحة');return}const dr=state.drafts[date];if(dr){if(Object.keys(dr).length)state.logs[date]=dr;else delete state.logs[date];delete state.drafts[date]}state.confirmed[date]=true;persist();closeModal();renderAttendance();renderDashboard();renderReports();toast('تم اعتماد تحضير اليوم')})}
+  function missingDays(key){const [y,m]=key.split('-').map(Number),last=new Date(y,m,0).getDate(),t=todayISO(),out=[];if(!state.employees.length)return out;for(let i=1;i<=last;i++){const d=`${key}-${String(i).padStart(2,'0')}`;if(d>t)break;if(dateParts(d).getDay()!==5&&!Object.keys(state.logs[d]||{}).length)out.push(i)}return out}
+  function setStatus(id,status){const date=$('attendanceDate').value||todayISO();if(!isEditable(date)){toast('هذا اليوم مغلق للعرض فقط');return}const dr=ensureDraft(date);if(dr[id]===status)delete dr[id];else dr[id]=status;persist();renderAttendance();renderDashboard()}
+  function renderEmployees(){const q=$('employeeSearch').value.trim().toLowerCase();const filtered=state.employees.filter(e=>(e.name+' '+e.phone+' '+(e.role||'')).toLowerCase().includes(q));$('employeeTotal').textContent=`${state.employees.length} موظف`;if(!filtered.length){$('employeesList').innerHTML=`<div class="empty-state"><div class="empty-icon">♙</div><strong>${state.employees.length?'لا توجد نتائج':'قائمة الموظفين فارغة'}</strong><p>أضف الموظفين بالأسماء وأرقام الهواتف، وسيظهرون في شاشة التحضير.</p><button class="btn btn-primary" onclick="openEmployeeForm()">＋ إضافة أول موظف</button></div>`;return}$('employeesList').innerHTML=filtered.map((e)=>`<div class="quick-row"><div class="avatar">${esc(e.name.charAt(0))}</div><div class="quick-meta"><strong>${esc(e.name)}</strong><span>${esc(e.role||'موظف')} · <b dir="ltr">${esc(e.phone)}</b></span></div><div class="employee-manage-actions"><button title="التفاصيل" onclick="openEmployeeDetails('${e.id}')">◷</button><button title="تعديل" onclick="openEmployeeForm('${e.id}')">✎</button><button class="delete" title="حذف" onclick="deleteEmployee('${e.id}')">×</button></div></div>`).join('')}
+  function openEmployeeForm(id=''){const emp=state.employees.find(x=>x.id===id);openModal(emp?'تعديل بيانات الموظف':'إضافة موظف جديد',`<form id="employeeModalForm"><div class="field-group"><label class="field-label">اسم الموظف بالكامل</label><input class="field" name="name" required value="${esc(emp?.name||'')}" placeholder="مثال: أحمد محمد علي"></div><div class="field-group"><label class="field-label">الوظيفة / القسم</label><input class="field" name="role" value="${esc(emp?.role||'')}" placeholder="مثال: محاسب"></div><div class="field-group"><label class="field-label">رقم الهاتف (واتساب)</label><input class="field ltr" name="phone" type="tel" required value="${esc(emp?.phone||'')}" placeholder="01xxxxxxxxx"></div><div class="modal-actions"><button class="btn btn-primary" type="submit">حفظ البيانات</button><button class="btn btn-light" type="button" onclick="closeModal()">إلغاء</button></div></form>`);$('employeeModalForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const data={name:String(fd.get('name')).trim(),role:String(fd.get('role')).trim(),phone:String(fd.get('phone')).trim()};if(!data.name||!data.phone){toast('أدخل الاسم ورقم الهاتف');return}if(emp){Object.assign(emp,data)}else state.employees.push({id:uid(),...data});persist();closeModal();renderEmployees();renderAttendance();renderDashboard();toast(emp?'تم تحديث الموظف':'تمت إضافة الموظف')})}
+  function deleteEmployee(id){const emp=state.employees.find(x=>x.id===id);if(!emp)return;openModal('تأكيد حذف الموظف',`<p style="font-size:12px;line-height:1.9;color:var(--muted)">هل تريد حذف <b>${esc(emp.name)}</b>؟ سيتم حذف سجلات حضوره المرتبطة به من هذا الجهاز أيضًا.</p><div class="modal-actions"><button class="btn btn-red" onclick="confirmDeleteEmployee('${id}')">حذف الموظف</button><button class="btn btn-light" onclick="closeModal()">إلغاء</button></div>`)}
+  function confirmDeleteEmployee(id){state.employees=state.employees.filter(x=>x.id!==id);for(const [d,log] of Object.entries(state.logs)){delete log[id];if(!Object.keys(log).length)delete state.logs[d]}Object.values(state.drafts).forEach(l=>delete l[id]);persist();closeModal();renderEmployees();renderAttendance();renderDashboard();renderReports();toast('تم حذف الموظف')}
+  function renderReports(){const key=`${$('reportYear').value}-${$('reportMonth').value}`;const s=statsForMonth(key);$('reportEmployees').textContent=state.employees.length;$('reportPresent').textContent=s.present;$('reportAbsent').textContent=s.absent;$('reportLate').textContent=s.late;{const m=missingDays(key);$('reportCheck').textContent=m.length?`أيام بدون أي تسجيل (غير الجمعة): ${m.join('، ')} — راجعها قبل إرسال الملف للإدارة.`:'كل أيام العمل في هذا الشهر مسجلة، الملف جاهز للإرسال.'}const body=$('reportTableBody');if(!state.employees.length){body.innerHTML='<tr><td colspan="8" style="text-align:center;color:#8293a3">لا يوجد موظفون مسجلون</td></tr>';return}body.innerHTML=state.employees.map((emp,i)=>{const es=statsForEmployee(emp.id,key);const attended=es.present+es.late;const workDays=es.present+es.absent+es.late;const rate=workDays?Math.round(attended/workDays*100):0;return `<tr onclick="openEmployeeDetails('${emp.id}','${key}')" style="cursor:pointer"><td class="number">${i+1}</td><td><b>${esc(emp.name)}</b></td><td>${esc(emp.role||'—')}</td><td class="number" style="color:var(--green)">${es.present}</td><td class="number" style="color:var(--red)">${es.absent}</td><td class="number" style="color:var(--amber)">${es.late}</td><td class="number">${es.leave}</td><td class="number">${rate}%</td></tr>`}).join('')}
+  function reportKey(){return `${$('reportYear').value}-${$('reportMonth').value}`}
+  function reportRows(key){return state.employees.map((emp,i)=>{const s=statsForEmployee(emp.id,key);const total=s.present+s.absent+s.late;return {rank:i+1,emp,s,total,rate:total?Math.round((s.present+s.late)/total*100):0}})}
+  async function makeWorkbook(key){
+    if(!window.ExcelJS)throw new Error('مكتبة Excel غير محملة. أعد تحميل الصفحة وحاول مرة أخرى.');
+    const wb=new ExcelJS.Workbook();wb.creator=state.supervisor?.name||'دفتر التحضير';wb.created=new Date();
+    const rows=reportRows(key),sum=statsForMonth(key),n=rows.length,days=new Date(Number(key.slice(0,4)),Number(key.slice(5,7)),0).getDate();
+    const NAVY='FF123F3A',GREY='FFEFEDE3',fill=c=>({type:'pattern',pattern:'solid',fgColor:{argb:c}});
+    const sd={style:'thin',color:{argb:'FFC9CDD9'}},box={top:sd,bottom:sd,left:sd,right:sd};
+    const FILL={present:'FFDDF0E4',absent:'FFF6D9D6',late:'FFF6E7C4',leave:'FFDCE3F3'},CODE={present:'ح',absent:'غ',late:'ت',leave:'إ'};
+    const page=ws=>{ws.pageSetup={paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:.4,right:.4,top:.5,bottom:.5,header:.3,footer:.3}};ws.headerFooter={oddFooter:'&C&P / &N'}};
+    const style=(row,o={})=>row.eachCell({includeEmpty:true},c=>{c.border=box;c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.font={name:'Arial',size:10,...(o.font||{})};if(o.fill)c.fill=fill(o.fill)});
+    const hdr=row=>{style(row,{fill:NAVY,font:{bold:true,color:{argb:'FFFFFFFF'}}});row.height=24};
+    const left=c=>{c.alignment={horizontal:'right',vertical:'middle'}};
+    const s1=wb.addWorksheet('ملخص الشهر',{views:[{rightToLeft:true,showGridLines:false}]});page(s1);
+    s1.columns=[{width:6},{width:28},{width:20},{width:16},{width:12},{width:12},{width:12},{width:12},{width:14}];
+    s1.mergeCells('A1:I1');const t=s1.getCell('A1');t.value='تقرير حضور الموظفين — '+formatMonth(key);t.font={name:'Arial',size:16,bold:true,color:{argb:NAVY}};left(t);s1.getRow(1).height=32;
+    const miss=missingDays(key);
+    [['المنشأة / المشرف',state.supervisor?.name||'—'],['تاريخ الإعداد',formatDate(todayISO())],['أيام بدون تسجيل',miss.length?miss.join('، '):'لا يوجد']].forEach((p,i)=>{const r=s1.addRow([p[0],'',p[1]]);s1.mergeCells(i+2,1,i+2,2);s1.mergeCells(i+2,3,i+2,6);r.getCell(1).font={name:'Arial',size:10,bold:true,color:{argb:'FF75847C'}};r.getCell(3).font={name:'Arial',size:10};left(r.getCell(1));left(r.getCell(3))});
+    s1.addRow([]);const H=6;hdr(s1.addRow(['م','اسم الموظف','الوظيفة','رقم الهاتف','حضور','غياب','تأخير','إجازة','نسبة الحضور']));
+    rows.forEach(r=>{const row=s1.addRow([r.rank,r.emp.name,r.emp.role||'',r.emp.phone,r.s.present,r.s.absent,r.s.late,r.s.leave,r.total?r.rate/100:null]);style(row);left(row.getCell(2));row.getCell(9).numFmt='0%';if(r.s.absent)row.getCell(6).font={name:'Arial',size:10,bold:true,color:{argb:'FFB8403A'}};if(r.total&&r.rate<80)row.getCell(9).fill=fill('FFF6D9D6')});
+    const tv={E:sum.present,F:sum.absent,G:sum.late,H:sum.leave};
+    const tot=s1.addRow(['','الإجمالي','','',...['E','F','G','H'].map(c=>({formula:n?`SUM(${c}${H+1}:${c}${H+n})`:'0',result:tv[c]})),'']);style(tot,{fill:GREY,font:{bold:true}});
+    if(n)s1.autoFilter=`A${H}:I${H+n}`;
+    s1.addRow([]);s1.addRow([]);const sg=s1.addRow(['','إعداد المشرف: ____________________','','','','اعتماد الإدارة: ____________________']);sg.eachCell(c=>{c.font={name:'Arial',size:10,bold:true}});
+    const dn=i=>dateParts(`${key}-${String(i).padStart(2,'0')}`),WD=['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+    const s2=wb.addWorksheet('كشف الأيام',{views:[{rightToLeft:true,state:'frozen',xSplit:2,ySplit:2}]});page(s2);
+    s2.columns=[{width:5},{width:24},...Array.from({length:days},()=>({width:5.4})),{width:8},{width:8},{width:8},{width:8}];
+    hdr(s2.addRow(['م','اسم الموظف',...Array.from({length:days},(_,i)=>i+1),'حضور','غياب','تأخير','إجازة']));
+    const wr=s2.addRow(['','',...Array.from({length:days},(_,i)=>WD[dn(i+1).getDay()]),'','','','']);hdr(wr);wr.height=18;wr.eachCell(c=>{c.font={name:'Arial',size:7,bold:true,color:{argb:'FFFFFFFF'}}});
+    rows.forEach(r=>{const cells=Array.from({length:days},(_,i)=>statusOf(`${key}-${String(i+1).padStart(2,'0')}`,r.emp.id));const row=s2.addRow([r.rank,r.emp.name,...cells.map(v=>CODE[v]||''),r.s.present,r.s.absent,r.s.late,r.s.leave]);style(row);left(row.getCell(2));cells.forEach((v,i)=>{const c=row.getCell(i+3);if(v){c.fill=fill(FILL[v]);c.font={name:'Arial',size:10,bold:true}}else if(dn(i+1).getDay()===5)c.fill=fill('FFE3E5EC')})});
+    s2.addRow([]);const lg=s2.addRow(['','ح = حاضر     غ = غائب     ت = متأخر     إ = إجازة     الخانة الرمادية = يوم الجمعة']);lg.getCell(2).font={name:'Arial',size:9,color:{argb:'FF75847C'}};
+    const s3=wb.addWorksheet('السجل اليومي',{views:[{rightToLeft:true,state:'frozen',ySplit:1}]});page(s3);
+    s3.columns=[{width:13},{width:13},{width:28},{width:20},{width:16},{width:12}];
+    hdr(s3.addRow(['التاريخ','اليوم','اسم الموظف','الوظيفة','رقم الهاتف','الحالة']));let cnt=0;
+    Object.keys(state.logs).filter(d=>d.startsWith(key)).sort().forEach(d=>state.employees.forEach(emp=>{const st=statusOf(d,emp.id);if(!st||!STATUS[st])return;const row=s3.addRow([d,formatDate(d,{weekday:'long'}),emp.name,emp.role||'',emp.phone,STATUS[st].label]);style(row);row.getCell(6).fill=fill(FILL[st]);cnt++}));
+    if(cnt)s3.autoFilter=`A1:F${cnt+1}`;
+    return wb}
+  async function deliverFile(blob,filename,title){const file=new File([blob],filename,{type:blob.type});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:title||filename,text:'تقرير من دفتر التحضير'});toast('تمت المشاركة');return}catch(err){if(err&&err.name==='AbortError'){toast('تم إلغاء المشاركة');return}}}const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);toast('تم تجهيز الملف')}
+  async function exportExcel(){try{const key=reportKey();toast('جارٍ تجهيز ملف Excel...');const wb=await makeWorkbook(key);const buf=await wb.xlsx.writeBuffer();const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});await deliverFile(blob,`تقرير_الحضور_${key}.xlsx`,`تقرير حضور ${formatMonth(key)}`)}catch(e){console.error(e);toast(e.message||'تعذر إنشاء ملف Excel')}}
+  function buildPrintReport(key){const rows=reportRows(key);const s=statsForMonth(key);const days=new Date(Number(key.slice(0,4)),Number(key.slice(5,7)),0).getDate();const summaryRows=rows.map(r=>`<tr><td>${r.rank}</td><td>${esc(r.emp.name)}</td><td>${esc(r.emp.role||'—')}</td><td>${esc(r.emp.phone)}</td><td>${r.s.present}</td><td>${r.s.absent}</td><td>${r.s.late}</td><td>${r.s.leave}</td><td>${r.rate}%</td></tr>`).join('');const matrixRows=rows.map(r=>`<tr><td>${r.rank}</td><td>${esc(r.emp.name)}</td>${Array.from({length:days},(_,i)=>{const d=`${key}-${String(i+1).padStart(2,'0')}`;return `<td>${STATUS[statusOf(d,r.emp.id)]?.label||'—'}</td>`}).join('')}</tr>`).join('');$('printRoot').innerHTML=`<h1>تقرير حضور الموظفين</h1><p>المنشأة / المشرف: ${esc(state.supervisor?.name||'—')} · الفترة: ${esc(formatMonth(key))} · تاريخ الطباعة: ${esc(formatDate(todayISO()))}</p><div class="print-summary"><span>عدد الموظفين: ${state.employees.length}</span><span>الحضور: ${s.present}</span><span>الغياب: ${s.absent}</span><span>التأخير: ${s.late}</span><span>الإجازات: ${s.leave}</span></div><h2>ملخص الموظفين</h2><table><thead><tr><th>م</th><th>اسم الموظف</th><th>الوظيفة</th><th>رقم الهاتف</th><th>حضور</th><th>غياب</th><th>تأخير</th><th>إجازة</th><th>النسبة</th></tr></thead><tbody>${summaryRows}</tbody></table><h2 class="print-break">كشف الحضور اليومي · ${esc(formatMonth(key))}</h2><table><thead><tr><th>م</th><th>اسم الموظف</th>${Array.from({length:days},(_,i)=>`<th>${i+1}</th>`).join('')}</tr></thead><tbody>${matrixRows}</tbody></table><p style="margin-top:15px">جميع الحقوق محفوظة © 2026 · تطوير <a class="developer-link" href="#" data-developer-link>peterelea</a></p>`;syncDeveloperLinks()}
+  function printPdf(){const key=reportKey();buildPrintReport(key);toast('جارٍ تجهيز التقرير');setTimeout(()=>window.print(),180)}
+  function openEmployeeDetails(id,key=reportKey()){const emp=state.employees.find(e=>e.id===id);if(!emp)return;selectedEmployeeId=id;const s=statsForEmployee(id,key);const dates=Object.keys(state.logs).filter(d=>d.startsWith(key)&&state.logs[d][id]).sort().reverse();openModal('تفاصيل الموظف',`<div class="profile-head"><div class="avatar">${esc(emp.name.charAt(0))}</div><div><b>${esc(emp.name)}</b><div class="small muted">${esc(emp.role||'موظف')}</div><div class="small muted" dir="ltr">${esc(emp.phone)}</div></div></div><div class="modal-stat-grid"><div class="modal-stat"><strong style="color:var(--green)">${s.present}</strong><span>أيام حضور</span></div><div class="modal-stat"><strong style="color:var(--red)">${s.absent}</strong><span>أيام غياب</span></div><div class="modal-stat"><strong style="color:var(--amber)">${s.late}</strong><span>أيام تأخير</span></div><div class="modal-stat"><strong>${s.leave}</strong><span>أيام إجازة</span></div></div><div class="section-title"><div><h3>سجل ${esc(formatMonth(key))}</h3><p>الحالات المسجلة فقط</p></div></div><div class="quick-list">${dates.length?dates.map(d=>`<div class="quick-row"><div class="quick-meta"><strong>${esc(formatDate(d))}</strong><span>${esc(d)}</span></div><span class="status ${STATUS[statusOf(d,id)].class}">${STATUS[statusOf(d,id)].label}</span></div>`).join(''):'<div class="muted-note">لا توجد سجلات لهذا الموظف في الشهر المحدد.</div>'}</div><div class="modal-actions"><button class="btn btn-green" onclick="openWhatsApp('${id}')">واتساب الموظف</button><button class="btn btn-light" onclick="closeModal()">إغلاق</button></div>`,'large')}
+  const WA_MESSAGES={attendance:(e,n)=>`أهلاً أ/ ${e}، تم تسجيل حضورك اليوم بنجاح. شكرًا لالتزامك. تحياتي، ${n}.`,late:(e,n)=>`أهلاً أ/ ${e}، نود تذكيرك بالتواصل معنا بخصوص التأخير عن موعد الحضور اليوم. تحياتي، ${n}.`,absence:(e,n)=>`أهلاً أ/ ${e}، لم يتم رصد حضورك اليوم وتم تسجيل الحالة وفق دفتر التحضير. برجاء إفادتنا بسبب الغياب. تحياتي، ${n}.`,supervision:(e,n)=>`أهلاً أ/ ${e}، برجاء مراجعة تعليمات ومهام الإشراف الخاصة باليوم. تحياتي، ${n}.`};
+  function openWhatsApp(id){const emp=state.employees.find(e=>e.id===id);if(!emp)return;waEmployeeId=id;openModal('رسالة واتساب سريعة',`<div class="profile-head" style="margin-bottom:15px"><div class="avatar">${esc(emp.name.charAt(0))}</div><div><b>${esc(emp.name)}</b><div class="small muted" dir="ltr">${esc(emp.phone)}</div></div></div><div class="wa-options"><button class="wa-option" onclick="sendWhatsApp('attendance')">تأكيد الحضور <span>إرسال ↗</span></button><button class="wa-option" onclick="sendWhatsApp('late')">تنبيه بالتأخير <span>إرسال ↗</span></button><button class="wa-option" onclick="sendWhatsApp('absence')">استفسار عن الغياب <span>إرسال ↗</span></button><button class="wa-option" onclick="sendWhatsApp('supervision')">رسالة إشراف ومهام <span>إرسال ↗</span></button></div><p class="muted small" style="margin:12px 0 0">سيتم فتح واتساب برسالة جاهزة ويمكنك مراجعتها قبل الإرسال.</p>`)}
+  function sendWhatsApp(type){const emp=state.employees.find(e=>e.id===waEmployeeId);if(!emp)return;let phone=String(emp.phone||'').replace(/\D/g,'');if(phone.startsWith('01'))phone='2'+phone;else if(phone.startsWith('1')&&phone.length===10)phone='20'+phone;if(phone.startsWith('002'))phone=phone.slice(2);if(!phone){toast('رقم الهاتف غير صالح');return}const msg=WA_MESSAGES[type]?.(emp.name,state.supervisor?.name||'إدارة المتابعة');const url=`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;window.open(url,'_blank','noopener');closeModal()}
+  function openModal(title,html,size=''){ $('modalRoot').innerHTML=`<div class="modal-backdrop" onclick="if(event.target===this)closeModal()"><section class="modal ${size}"><div class="modal-head"><h3>${title}</h3><button class="close-btn" onclick="closeModal()">×</button></div>${html}</section></div>` }
+  function closeModal(){$('modalRoot').innerHTML=''}
+  function renderSettings(){const f=$('settingsForm');if(!state.supervisor)return;f.elements.name.value=state.supervisor.name||'';f.elements.phone.value=state.supervisor.phone||'';f.elements.email.value=state.supervisor.email||''}
+  function saveSettings(e){e.preventDefault();const fd=new FormData(e.currentTarget);state.supervisor.name=String(fd.get('name')).trim();state.supervisor.phone=String(fd.get('phone')).trim();state.supervisor.email=String(fd.get('email')).trim();persist();updateSupervisorUI();toast('تم حفظ الإعدادات')}
+  function logout(){state.session=false;persist();showAuth();toast('تم تسجيل الخروج')}
+  function changePasswordModal(){openModal('تغيير كلمة المرور',`<form id="passwordForm"><div class="field-group"><label class="field-label">كلمة المرور الحالية</label><input class="field" type="password" name="current" required></div><div class="field-group"><label class="field-label">كلمة المرور الجديدة</label><input class="field" type="password" name="next" minlength="6" required></div><div class="field-group"><label class="field-label">تأكيد كلمة المرور الجديدة</label><input class="field" type="password" name="confirm" minlength="6" required></div><div class="modal-actions"><button class="btn btn-primary">حفظ</button><button type="button" class="btn btn-light" onclick="closeModal()">إلغاء</button></div></form>`);$('passwordForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget);if(f.get('current')!==state.supervisor.password){toast('كلمة المرور الحالية غير صحيحة');return}if(f.get('next')!==f.get('confirm')){toast('كلمتا المرور غير متطابقتين');return}state.supervisor.password=String(f.get('next'));persist();closeModal();toast('تم تحديث كلمة المرور')})}
+  async function exportBackup(){const data={app:'DaftarAttendance',version:3,exportedAt:new Date().toISOString(),state:{activated:state.activated,supervisor:state.supervisor,employees:state.employees,logs:state.logs,confirmed:state.confirmed}};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});await deliverFile(blob,`نسخة_احتياطية_دفتر_التحضير_${todayISO()}.json`,'نسخة احتياطية من دفتر التحضير')}
+  function restoreBackup(e){const file=e.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result);const incoming=parsed.state||parsed;if(!Array.isArray(incoming.employees)||!incoming.logs||typeof incoming.logs!=='object')throw new Error('الملف لا يحتوي على نسخة احتياطية صحيحة');if(!confirm('سيتم استبدال بيانات هذا المتصفح بالبيانات الموجودة في النسخة الاحتياطية. هل تريد المتابعة؟'))return;state={...state,activated:true,supervisor:incoming.supervisor||state.supervisor,employees:incoming.employees,logs:incoming.logs,drafts:{},confirmed:incoming.confirmed||{},session:true};persist();showApp();renderDashboard();toast('تم استيراد النسخة الاحتياطية بنجاح')}catch(err){toast(err.message||'تعذر قراءة ملف النسخة الاحتياطية')}finally{e.target.value=''}};reader.readAsText(file)}
+  document.addEventListener('DOMContentLoaded',init);
+  </script>
+</body>
+</html>
